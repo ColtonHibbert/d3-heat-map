@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta lang="en-us" charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <h1>Monthly Global Land-Surface Temperature</h1>
+        <h2>1753 - 2015: base temperature 8.66℃</h2>
+        <div id="d3render"></div>
+    </body>
+    <script>
+        async function runD3Aync() {
+            const heatData = fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json')
+            .then(res => res.json())
+            .catch(err => console.log(err))
+        }
+    </script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</html>
