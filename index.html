@@ -5,17 +5,123 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <h1>Monthly Global Land-Surface Temperature</h1>
-        <h2>1753 - 2015: base temperature 8.66℃</h2>
+        <h1 id="title">Monthly Global Land-Surface Temperature</h1>
+        <h2 id="description">1753 - 2015: base temperature 8.66℃</h2>
         <div id="d3render"></div>
     </body>
-    <script>
-        async function runD3Aync() {
-            const heatData = fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json')
-            .then(res => res.json())
-            .catch(err => console.log(err))
-        }
-    </script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+    <script>
+        // 262 *5 1310
+        // 35 * 12 420
+        async function runD3Async() {
+            const heatData = await fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json')
+            .then(res => res.json())
+            .catch(err => console.log(err))
+
+            const svgWidth = 1510;
+            const svgHeight = 620;
+            const padding = 150;
+
+            const svg = d3.select('#d3render')
+            .append('svg')
+            .attr('width', svgWidth)
+            .attr('height', svgHeight)
+            .style('background-color', 'white')
+
+            
+            const xScale = d3.scaleLinear()
+            .domain([ 1753 , 2016 ])
+            .range([padding, svgWidth - 50 ])
+
+            const yticks = d3.ticks(.5, 12.5, 1);
+            const yScale = d3.scaleLinear()
+            .domain([ 13, 1 ])
+            .range([ svgHeight - padding, 50 ])
+            //.ticks(yticks)
+
+           
+            svg.selectAll('rect')
+            .data(heatData.monthlyVariance)
+            .enter()
+            .append('rect')
+            .attr('height', 35)
+            .attr('width', 5)
+            .attr('class', 'cell')
+            .attr('x', (d) => {
+                return xScale(d.year);
+            })
+            .attr('y', (d) => {
+                return yScale(d.month);
+            })
+            .attr('data-month', (d) => {
+                return d.month - 1;
+            })
+            .attr('data-year', (d) => {
+                return d.year;
+            })
+            .attr('data-temp', (d) => {
+                return 8.66 + d.variance;
+            })
+            .attr('data-diff-temp', (d) => {
+                return d.variance;
+            })
+            .attr('fill', (d) => {
+                const temp = 8.66 + d.variance;
+                if(temp < 2.7) {
+                    return 'rgb(49, 54, 149)';
+                }
+                if(temp > 2.7 && temp <= 3.8) {
+                    return 'rgb(69, 117, 180)';
+                }
+                if(temp > 3.8 && temp <= 5) {
+                    return 'rgb(116, 173, 209)';
+                }
+                if(temp > 5 && temp <= 6.1) {
+                    return 'rgb(171, 217, 233)';
+                }
+                if(temp > 6.1 && temp <= 7.2) {
+                    return 'rgb(224, 243, 248)';
+                }
+                if(temp > 7.2 && temp <= 8.3) {
+                    return 'rgb(255, 255, 191)';
+                }
+                if(temp > 8.3 && temp <= 9.5) {
+                    return 'rgb(254, 224, 144)' ;
+                }
+                if(temp > 9.5 && temp <= 10.6) {
+                    return 'rgb(253, 174, 97)';
+                }
+                if(temp > 10.6 && temp <= 11.7) {
+                    return 'rgb(244, 109, 67)';
+                }
+                if(temp > 11.7 && temp <= 12.8) {
+                    return 'rgb(215, 48, 39)';
+                }
+                if(temp > 12.8) {
+                    return 'rgb(165, 0, 38)';
+                }
+            })
+
+            const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
+
+            svg.append('g')
+            .attr('transform', `translate(0, ${svgHeight - padding })`)
+            .attr('id', 'x-axis')
+            .call(xAxis)
+
+            const yAxis = d3.axisLeft(yScale)//.ticks(yticks)
+            
+            
+            //.tickValues(['January'])
+
+            svg.append('g')
+            .attr('transform', `translate(${padding}, 0)`)
+            .attr('id', 'y-axis')
+            .call(yAxis)
+
+        }
+        runD3Async();
+    </script>
+    
 </html>
