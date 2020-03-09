@@ -34,11 +34,17 @@
             .domain([ 1753 , 2016 ])
             .range([padding, svgWidth - 50 ])
 
-            const yticks = d3.ticks(.5, 12.5, 1);
-            const yScale = d3.scaleLinear()
-            .domain([ 13, 1 ])
+            
+            const yScale = d3.scaleTime()
+            .domain([ new Date(2020,11,30), new Date(2020,0,1) ])
             .range([ svgHeight - padding, 50 ])
-            //.ticks(yticks)
+            .tickFormat('%B')
+
+            // const yScale = d3.scaleLinear()
+            // .domain([ 13, 1 ])
+            // .range([ svgHeight - padding, 50 ])
+            //.ticks(12)
+            //.tickFormat( 12 , "X")
 
            
             svg.selectAll('rect')
@@ -110,9 +116,13 @@
             .attr('id', 'x-axis')
             .call(xAxis)
 
-            const yAxis = d3.axisLeft(yScale)//.ticks(yticks)
+            //const yticks = d3.ticks(.5, 12.5, 1);
+            const yAxis = d3.axisLeft(yScale)
+            //.ticks(12)
+            //.tickFormat(d3.format("X"))
+            //.tickArguments([48879, 48878, 48879])
             
-            
+            //d3.format("#x")(48879);   // prefixed lowercase hexadecimal, "0xbeef"
             //.tickValues(['January'])
 
             svg.append('g')
