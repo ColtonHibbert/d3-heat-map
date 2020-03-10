@@ -12,6 +12,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
     <script>
+        
         // 262 *5 1310
         // 35 * 12 420
         async function runD3Async() {
@@ -34,11 +35,19 @@
             .domain([ 1753 , 2016 ])
             .range([padding, svgWidth - 50 ])
 
+            const months = [ "January", 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', ];
+
+            const yScale = d3.scaleOrdinal()
+            //.domain([ "January", 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ])
+            //.domain([12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ])
+            //.domain(['1','2','3','4','5','6','7','8','9','10','11','12'])
+            //.domain()
+            .range([50,85,120,155,190,225,260,295,330,365,400,435,470])
             
-            const yScale = d3.scaleTime()
-            .domain([ new Date(2020,11,30), new Date(2020,0,1) ])
-            .range([ svgHeight - padding, 50 ])
-            .tickFormat('%B')
+            // const yScale = d3.scaleTime()
+            // .domain([ new Date(2020,11,30), new Date(2020,0,1) ])
+            // .range([ svgHeight - padding, 50 ])
+            //.tickFormat('%B')
 
             // const yScale = d3.scaleLinear()
             // .domain([ 13, 1 ])
@@ -118,6 +127,7 @@
 
             //const yticks = d3.ticks(.5, 12.5, 1);
             const yAxis = d3.axisLeft(yScale)
+            .tickValues(months)
             //.ticks(12)
             //.tickFormat(d3.format("X"))
             //.tickArguments([48879, 48878, 48879])
@@ -132,6 +142,116 @@
 
         }
         runD3Async();
+
+        
+    </script> 
+    <script>
+        function runPractice() {
+            const data = [
+                {
+                    //month: 1,
+                    month: 'January',
+                    year: 2000
+                },
+                {
+                    //month: 2,
+                    month: 'February',
+                    year: 2000
+                },
+                {
+                    //month: 3,
+                    month: 'March',
+                    year: 2000
+                },
+                {
+                    //month: 1,
+                    month: 'January',
+                    year: 2001
+                },
+                {
+                    //month: 2,
+                    month: 'February',
+                    year: 2001
+                },
+                {
+                    //month: 3,
+                    month: 'March',
+                    year: 2001
+                },
+                {
+                    //month: 1,
+                    month: 'January',
+                    year: 2002
+                },
+                {
+                    //month: 2,
+                    month: 'February',
+                    year: 2002
+                },
+                {
+                    //month: 3,
+                    month: 'March',
+                    year: 2002
+                }
+            ];
+
+
+            const svgWidth = 450;
+            const svgHeight = 450;
+            const padding = 50;
+
+            const svg = d3.select('#d3render')
+            .append('svg')
+            .attr('width', svgWidth)
+            .attr('height', svgHeight)
+            .style('background-color', 'white')
+
+            //var myData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            var myData = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+
+            const xScale = d3.scaleLinear()
+            .domain([ 2000, 2003 ])
+            .range([padding, svgWidth - padding ])
+
+            const yScale = d3.scaleOrdinal()
+            //.domain(['January', 'February', 'March'])
+            //.domain(myData)
+            .range([25,50,75,100,125,150,175,200,225,250,275,300,325])
+
+            svg.selectAll('rect')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('height', 25)
+            .attr('width', 25)
+            .attr('class', 'cell')
+            .attr('fill', 'blue')
+            .attr('x', (d) => {
+                return xScale(d.year);
+            })
+            .attr('y', (d) => {
+                return yScale(d.month);
+            })
+
+            
+           
+            
+            const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
+
+            svg.append('g')
+            .attr('transform', `translate(0, ${svgHeight - padding })`)
+            .attr('id', 'x-axis')
+            .call(xAxis)
+           
+
+            const yAxis = d3.axisLeft(yScale)
+            
+            svg.append('g')
+            .attr('transform', `translate(${padding}, 0)`)
+            .call(yAxis)
+
+        }
+       // runPractice();
     </script>
     
 </html>
